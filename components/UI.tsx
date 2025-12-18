@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'surface';
@@ -6,16 +7,22 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button: React.FC<ButtonProps> = ({ variant = 'primary', className = '', children, ariaLabel, ...props }) => {
-  // Added 'active:scale-99' for physical feedback
-  // Reduced base padding for mobile, scaled up for desktop (px-8 py-3 -> md:px-10 md:py-4)
-  const baseStyles = 'px-8 py-3 md:px-10 md:py-4 text-[10px] md:text-[11px] font-medium transition-all duration-fast ease-motion uppercase tracking-[0.3em] artisan-card active:scale-99 disabled:opacity-30 disabled:pointer-events-none relative overflow-hidden group/btn';
+  // Base: Extremely slow transitions, no harsh scale down.
+  const baseStyles = 'px-10 py-4 text-[10px] md:text-[11px] font-medium transition-all duration-slow ease-motion uppercase tracking-[0.3em] relative overflow-hidden group/btn hover:tracking-[0.35em] disabled:opacity-30 disabled:pointer-events-none';
   
   const variants = {
-    // Replaced generic shadow with luxury-shadow class control
-    primary: 'bg-accent text-text-on-accent hover:bg-primary hover:text-text-on-contrast luxury-shadow hover:shadow-lg',
-    secondary: 'bg-primary text-text-on-contrast hover:bg-accent hover:text-text-on-accent luxury-shadow hover:shadow-lg',
-    ghost: 'bg-transparent text-text hover:bg-accent/10',
+    // Primary: Solid but "soft" fill. Hover creates a subtle lightening/sheen, not a hard color swap.
+    primary: 'bg-accent text-text-on-accent border border-accent hover:bg-accent/90 hover:border-accent/80',
+    
+    // Secondary: Dark base.
+    secondary: 'bg-primary text-text-on-contrast border border-primary hover:bg-primary/90',
+    
+    // Ghost: No background. Text spacing expansion is the main interaction.
+    ghost: 'bg-transparent text-text border border-transparent hover:text-accent',
+    
+    // Outline: The border color shifts slowly.
     outline: 'bg-transparent border border-border text-text hover:border-accent hover:text-accent',
+    
     surface: 'bg-surface text-primary border border-border hover:border-accent hover:text-accent',
   };
 
@@ -26,77 +33,67 @@ export const Button: React.FC<ButtonProps> = ({ variant = 'primary', className =
       {...props}
     >
       <span className="relative z-10">{children}</span>
-      {/* Soft gradient wash on hover - subtle light effect */}
-      <span className="absolute inset-0 bg-white/0 group-hover/btn:bg-white/5 transition-colors duration-mid ease-motion"></span>
+      {/* The Luxury Sheen: A subtle light reflection passing through on hover */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-sheen"></div>
     </button>
   );
 };
 
 export const Badge: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <span className={`px-4 py-2 text-[10px] font-medium uppercase tracking-[0.2em] bg-accent/10 text-accent border border-accent/20 artisan-card cursor-default ${className}`}>
+  <span className={`px-4 py-2 text-[9px] font-medium uppercase tracking-[0.2em] bg-surface/50 backdrop-blur-md text-accent border border-accent/20 cursor-default ${className}`}>
     {children}
   </span>
 );
 
 export const SectionHeading: React.FC<{ title: string; subtitle?: string; center?: boolean; contrast?: boolean }> = ({ title, subtitle, center, contrast }) => (
-  <div className={`mb-12 md:mb-24 scroll-reveal ${center ? 'text-center' : ''}`}>
+  <div className={`mb-16 md:mb-32 scroll-reveal opacity-0 ${center ? 'text-center' : ''}`}>
     {subtitle && (
-      <p className={`uppercase tracking-[0.5em] text-[10px] font-medium mb-4 md:mb-6 italic opacity-90 transition-colors duration-slow ${contrast ? 'text-accent' : 'text-accent'}`}>
+      <p className={`uppercase tracking-[0.4em] text-[10px] font-medium mb-6 md:mb-8 italic transition-colors duration-slow ${contrast ? 'text-accent' : 'text-accent'}`}>
         {subtitle}
       </p>
     )}
-    {/* Responsive font size: 3xl mobile -> 6xl desktop */}
-    <h2 className={`text-3xl md:text-5xl lg:text-6xl font-humanist leading-[1.1] italic transition-colors duration-slow ${contrast ? 'text-text-on-contrast' : 'text-primary'}`}>{title}</h2>
+    <h2 className={`text-4xl md:text-6xl lg:text-7xl font-humanist leading-[1.1] italic transition-colors duration-slow ${contrast ? 'text-text-on-contrast' : 'text-primary'}`}>{title}</h2>
   </div>
 );
 
 export const ProductCard: React.FC<{ product: any; onAddToCart?: () => void }> = ({ product, onAddToCart }) => (
-  <article className="group cursor-pointer scroll-reveal relative" aria-labelledby={`product-name-${product.id}`}>
-    {/* Touch Optimization: The whole card is clickable via the parent Link, so we ensure visual feedback is immediate on touch */}
-    {/* Micro-scale interaction (1.01) instead of 1.10 */}
-    <div className="relative aspect-[4/5] overflow-hidden mb-6 md:mb-8 bg-border/10 artisan-card luxury-shadow transition-all duration-mid ease-motion group-hover:-translate-y-1 group-hover:shadow-xl border border-border/50 group-hover:border-accent/30 group-active:scale-[0.99]">
+  <article className="group cursor-pointer scroll-reveal opacity-0" aria-labelledby={`product-name-${product.id}`}>
+    {/* Image Container: No border radius, pure sharp luxury edges or very subtle. Minimal shadow. */}
+    <div className="relative aspect-[4/5] overflow-hidden mb-6 md:mb-8 bg-surface/50">
+      
+      {/* The Image: Slow zoom (scale 1.0 -> 1.05) over 1.5s. No fast jumps. */}
       <img 
         src={product.image} 
         alt="" 
-        // No zoom, just brightness/contrast shift
-        className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05] brightness-[0.95] transition-all duration-lux ease-motion group-hover:scale-101 group-hover:brightness-100 group-hover:grayscale-0"
+        className="w-full h-full object-cover grayscale-[0.1] contrast-[1.02] transition-transform duration-[1500ms] ease-motion group-hover:scale-105 group-hover:grayscale-0"
         loading="lazy"
         onLoad={(e) => (e.target as HTMLImageElement).classList.add('loaded')}
       />
-      
-      {/* Celebration Shimmer Effect - Slower */}
-      <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-10 transition-opacity duration-slow bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:animate-shimmer"></div>
 
+      {/* Seasonal Badge */}
       {product.isSeasonal && (
-        <div className="absolute top-6 left-6 christmas-only opacity-0 group-hover:opacity-100 transition-opacity duration-mid">
-          <Badge className="bg-surface/90 backdrop-blur-lg border-accent/30 text-accent shadow-sm">Celebration Drop</Badge>
+        <div className="absolute top-4 left-4 christmas-only opacity-0 group-hover:opacity-100 transition-opacity duration-mid">
+          <Badge>Celebration</Badge>
         </div>
       )}
       
-      {/* Button Reveal - Soft Fade/Slide */}
-      {/* On mobile (hover:none), we don't rely on hover for the button. The user clicks the card to go to detail. 
-          The button is decorative/CTA for desktop users. */}
-      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-mid ease-motion flex items-end justify-center pb-12 pointer-events-none md:pointer-events-auto">
-        <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-mid ease-motion delay-75">
-          <span className="hidden md:inline-block">
-             <Button 
-              variant="primary" 
-              className="px-8 text-[10px] shadow-2xl" 
-              // Stop propagation so clicking the button doesn't trigger the Link twice (though nested interactive controls are invalid HTML, this handles the visual logic)
-              onClick={(e) => { e.preventDefault(); onAddToCart?.(); }}
-              ariaLabel={`Explore scent notes for ${product.name}`}
-            >
-              Explore Note
-            </Button>
-          </span>
-        </div>
-      </div>
+      {/* Decorative Overlay: Just a subtle darkening on hover to make text pop if we had it overlaying */}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-[1500ms] ease-motion"></div>
     </div>
-    <div className="px-1 transition-opacity duration-mid group-hover:opacity-80">
-      <p className="text-[10px] text-accent uppercase tracking-[0.4em] mb-3 font-medium opacity-80">{product.category}</p>
-      <div className="flex justify-between items-baseline gap-6">
-        <h3 id={`product-name-${product.id}`} className="text-xl md:text-2xl font-humanist italic text-primary transition-colors duration-fast group-hover:text-accent">{product.name}</h3>
-        <p className="text-base font-humanist italic text-text-muted transition-colors duration-fast group-hover:text-primary">${product.price}.00</p>
+
+    {/* Typography: Interaction is tracking expansion */}
+    <div className="px-1 text-center md:text-left">
+      <p className="text-[9px] text-accent uppercase tracking-[0.3em] mb-3 font-medium opacity-80 group-hover:tracking-[0.4em] transition-all duration-[800ms] ease-motion">
+        {product.category}
+      </p>
+      
+      <div className="flex flex-col md:flex-row justify-between items-baseline gap-2">
+        <h3 id={`product-name-${product.id}`} className="text-xl md:text-2xl font-humanist italic text-primary group-hover:text-accent transition-colors duration-mid">
+          {product.name}
+        </h3>
+        <span className="text-sm font-humanist italic text-text-muted transition-colors duration-mid">
+          ${product.price}.00
+        </span>
       </div>
     </div>
   </article>

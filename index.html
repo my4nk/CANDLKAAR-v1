@@ -27,45 +27,46 @@
               humanist: ['Newsreader', 'serif'],
             },
             transitionDuration: {
-              'fast': '200ms',  // Hover (160-220ms)
-              'mid': '300ms',   // Surface/Depth (200-300ms)
-              'slow': '500ms',  // Reveals/Mood (320-420ms+)
-              'lux': '800ms',   // Drift/Background
+              'fast': '300ms',
+              'mid': '600ms',   // Slower standard
+              'slow': '1000ms',  // The "Luxury" second
+              'lux': '1600ms',   // Drift
             },
             transitionTimingFunction: {
-              // The "Luxury Curve": Exponential ease-out with high friction. 
-              // Starts quick to respond, settles very slowly. No bounce.
-              'motion': 'cubic-bezier(0.16, 1, 0.3, 1)', 
+              // The "Heavy Silk" Curve: Starts fast, settles extremely slowly.
+              // This gives objects "weight".
+              'motion': 'cubic-bezier(0.2, 0, 0, 1)', 
               'subtle': 'cubic-bezier(0.4, 0, 0.2, 1)',
             },
             scale: {
               '98': '0.98',
-              '99': '0.99',
-              '101': '1.01', // Micro-scale
-              '102': '1.02',
+              '99': '0.995', // Micro-scale for presses
+              '101': '1.02', // Subtle hover zoom
+              '102': '1.03',
             },
             animation: {
-              'fade-in': 'fadeIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-              'gentle-float': 'float 12s ease-in-out infinite', // Slower float
-              'reveal': 'reveal 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-              'shimmer': 'shimmer 3s linear infinite',
+              'fade-in': 'fadeIn 1.6s cubic-bezier(0.2, 0, 0, 1) forwards',
+              'reveal': 'reveal 1.2s cubic-bezier(0.2, 0, 0, 1) forwards',
+              'drift': 'drift 20s linear infinite',
+              'sheen': 'sheen 1.5s cubic-bezier(0.2, 0, 0, 1) forwards',
             },
             keyframes: {
               fadeIn: {
-                '0%': { opacity: '0', transform: 'translateY(8px)' }, // Reduced distance
-                '100%': { opacity: '1', transform: 'translateY(0)' },
+                '0%': { opacity: '0' }, 
+                '100%': { opacity: '1' },
               },
               reveal: {
-                '0%': { opacity: '0', transform: 'translateY(12px)' },
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
-              float: {
-                '0%, 100%': { transform: 'translateY(0)' },
-                '50%': { transform: 'translateY(-8px)' }, // Reduced distance
+              drift: {
+                '0%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+                '100%': { transform: 'translateY(0)' },
               },
-              shimmer: {
-                '0%': { backgroundPosition: '-200% 0' },
-                '100%': { backgroundPosition: '200% 0' },
+              sheen: {
+                '0%': { transform: 'translateX(-100%) skewX(-15deg)' },
+                '100%': { transform: 'translateX(200%) skewX(-15deg)' },
               }
             }
           },
@@ -78,32 +79,30 @@
         --color-surface: #faf7f2;   /* Creamy Linen */
         --color-primary: #3d3632;   /* Darker Warm Clay */
         --color-accent: #a67c74;    /* Deep Muted Rose */
-        /* Darkened border and muted text for better AA contrast */
         --color-border: #d4cdc5;    
         --color-text: #3d3632;
-        --color-text-muted: #5e5650; /* Darkened from #736b65 */
+        --color-text-muted: #5e5650; 
         
         --color-section-contrast: #2c2826; /* Deep Brown Background */
-        --color-text-on-contrast: #faf7f2; /* Light Text on Dark Section */
-        --color-text-on-accent: #ffffff;   /* White Text on Accent */
+        --color-text-on-contrast: #faf7f2; 
+        --color-text-on-accent: #ffffff;   
         
         --color-focus-ring: #a67c74;
         
-        --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
-        --motion-duration-mid: 300ms;
+        /* New Physics Variable */
+        --motion-ease: cubic-bezier(0.2, 0, 0, 1);
         
         --overlay-pattern: url("https://www.transparenttextures.com/patterns/natural-paper.png");
         --overlay-opacity: 0.04;
       }
 
       [data-mode="dark"] {
-        /* Dark Mode (Midnight Celebration) */
-        --color-surface: #0a0a0a;   /* Pure Obsidian */
-        --color-primary: #f0edea;   /* Platinum White */
-        --color-accent: #C8B2B7;    /* Dusty Mauve */
-        --color-border: #333333;    /* Distinct Charcoal Border */
+        --color-surface: #0a0a0a;   
+        --color-primary: #f0edea;   
+        --color-accent: #C8B2B7;    
+        --color-border: #333333;    
         --color-text: #f0edea;
-        --color-text-muted: #b0a8a0; /* Muted Silver */
+        --color-text-muted: #b0a8a0; 
         
         --color-section-contrast: #171717; 
         --color-text-on-contrast: #f0edea; 
@@ -116,10 +115,10 @@
       }
 
       [data-seasonal="christmas"] {
-        --color-accent: #b33e3e;    /* Deep Red (Light Mode) */
+        --color-accent: #b33e3e;    
       }
       [data-mode="dark"][data-seasonal="christmas"] {
-        --color-accent: #ff4d4d;    /* Bright Red (Dark Mode) */
+        --color-accent: #ff4d4d;    
       }
 
       body {
@@ -128,10 +127,9 @@
         font-family: 'Inter', sans-serif;
         line-height: 1.8;
         -webkit-font-smoothing: antialiased;
-        transition: background-color 0.8s var(--motion-ease), color 0.8s var(--motion-ease); /* Slower theme transition */
+        transition: background-color 1.2s var(--motion-ease), color 1.2s var(--motion-ease);
       }
 
-      /* Dynamic Texture Overlay */
       body::after {
         content: "";
         position: fixed;
@@ -143,7 +141,7 @@
         background-image: var(--overlay-pattern);
         opacity: var(--overlay-opacity);
         z-index: 9999;
-        transition: opacity 0.8s ease;
+        transition: opacity 1.2s ease;
       }
 
       h1, h2, h3, h4 {
@@ -156,84 +154,61 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        background: var(--color-surface); 
         background: color-mix(in srgb, var(--color-surface) 90%, transparent);
         backdrop-filter: blur(20px);
-        transition: background 0.5s ease, border-color 0.5s ease;
+        transition: background 1s ease, border-color 1s ease;
       }
 
-      /* WCAG 2.2 AA Focus Indicators - Warm & Soft */
+      /* Subtle Focus */
       *:focus-visible {
-        outline: 2px solid var(--color-focus-ring);
+        outline: 1px solid var(--color-focus-ring);
         outline-offset: 4px;
-        border-radius: 2px;
-        transition: outline-offset 0.2s ease-out;
+        transition: outline-offset 0.4s var(--motion-ease);
       }
       *:active:focus-visible {
         outline-offset: 2px;
       }
 
-      .artisan-card {
-        border-radius: 6px;
-        transition: transform 0.3s var(--motion-ease), box-shadow 0.3s var(--motion-ease), border-color 0.3s var(--motion-ease);
-        will-change: transform, box-shadow;
+      /* The Luxury Hover: Tracking Expansion */
+      .hover-track {
+        transition: letter-spacing 0.8s var(--motion-ease), color 0.8s var(--motion-ease), opacity 0.8s var(--motion-ease);
+      }
+      .hover-track:hover {
+        letter-spacing: 0.15em; 
       }
       
-      /* Physics-based press state */
-      .active-press:active {
-        transform: scale(0.99) !important;
-      }
-
+      /* Image Reveal Physics */
       img {
         opacity: 0;
-        transition: opacity 0.8s var(--motion-ease), transform 0.8s var(--motion-ease), filter 0.8s var(--motion-ease);
+        filter: blur(8px);
+        transform: scale(1.02);
+        transition: opacity 1.2s var(--motion-ease), filter 1.2s var(--motion-ease), transform 1.2s var(--motion-ease);
       }
       
       img.loaded {
         opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
       }
 
-      .luxury-shadow {
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08); /* Softer initial shadow */
-        transition: box-shadow 0.4s var(--motion-ease);
+      /* Smooth Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
       }
-      .luxury-shadow:hover {
-        box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+      ::-webkit-scrollbar-track {
+        background: transparent;
       }
-      
-      [data-mode="dark"] .luxury-shadow {
-        box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8);
-      }
-
-      /* Accessibility: Minimum target size */
-      button, a {
-        min-height: 44px;
-        min-width: 44px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      /* Mobile Hover Fix: Prevent sticky hover on touch */
-      @media (hover: none) {
-        .group:hover .group-hover\:opacity-100 {
-          /* Fallback for logic where hover isn't appropriate */
-        }
+      ::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 3px;
       }
 
-      /* Scroll Hint Gradient */
-      .scroll-hint-mask {
-        mask-image: linear-gradient(to right, black 85%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-      }
-      
       /* Reduced Motion */
       @media (prefers-reduced-motion: reduce) {
         *, ::before, ::after {
           animation-duration: 0.01ms !important;
           animation-iteration-count: 1 !important;
           transition-duration: 0.01ms !important;
-          scroll-behavior: auto !important;
         }
       }
     </style>
@@ -253,14 +228,13 @@
     <div id="root"></div>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const observerOptions = { root: null, rootMargin: '20px', threshold: 0.1 };
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.05 };
         const revealObserver = new IntersectionObserver((entries, observer) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               if (entry.target.tagName === 'IMG') {
                 entry.target.classList.add('loaded');
               } else {
-                // Stagger effect via delay based on child index if possible, otherwise pure class
                 setTimeout(() => {
                   entry.target.classList.add('animate-reveal');
                   entry.target.classList.remove('opacity-0');
