@@ -13,8 +13,9 @@ export const Home: React.FC = () => {
           <img 
             src="https://images.unsplash.com/photo-1602872030219-cdebb0844fbc?q=80&w=2000&auto=format&fit=crop" 
             alt="" 
-            // Removed zoom scale, focusing on calm presence
-            className="w-full h-full object-cover brightness-[0.5] contrast-[1.1] grayscale-[0.2] transition-transform duration-[10s] ease-linear scale-100 hover:scale-101"
+            // Optimized: Removed large scale animation on mobile to prevent jank. Scale is now 100 -> 101 only on hover/large screens.
+            className="w-full h-full object-cover brightness-[0.5] contrast-[1.1] grayscale-[0.2] transition-transform duration-[10s] ease-linear scale-100 lg:hover:scale-101"
+            loading="eager"
             onLoad={(e) => (e.target as HTMLImageElement).classList.add('loaded')}
           />
           {/* Subtle Celebration Particles Layer */}
@@ -76,19 +77,23 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Value Propositions - Grounded */}
+      {/* Value Propositions - Boxed & Grounded */}
       <section className="py-24 md:py-48 lg:py-64 bg-surface relative transition-colors duration-lux">
         <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-24 lg:gap-32">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {[
               { title: 'Artisan Sourcing', desc: 'Hand-blown glass vessels designed to capture the depth of the flame.' },
               { title: 'Patient Curing', desc: 'Aged in temperature-controlled chambers to ensure scent integrity and throw.' },
               { title: 'Botanical Purity', desc: 'Clean-burning waxes derived from sustainable harvests for a mindful space.' },
             ].map((item, idx) => (
-              <article key={idx} className="group scroll-reveal" style={{ transitionDelay: `${idx * 200}ms` }}>
-                <div className="w-16 h-[2px] bg-accent/40 mb-6 md:mb-10 group-hover:w-32 group-hover:bg-accent transition-all duration-slow ease-motion"></div>
-                <h3 className="text-2xl md:text-3xl font-humanist mb-4 md:mb-8 italic text-primary">{item.title}</h3>
-                <p className="text-text-muted text-base md:text-lg leading-loose font-light humanist italic opacity-80 transition-opacity duration-mid group-hover:opacity-100">{item.desc}</p>
+              <article 
+                key={idx} 
+                className="group scroll-reveal artisan-card border border-border p-8 md:p-12 bg-white/5 hover:bg-white/20 hover:border-accent/30 transition-all duration-slow ease-motion hover:-translate-y-1 hover:shadow-lg" 
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <div className="w-12 h-[1px] bg-accent/40 mb-8 group-hover:w-20 group-hover:bg-accent transition-all duration-slow ease-motion"></div>
+                <h3 className="text-2xl md:text-3xl font-humanist mb-6 italic text-primary">{item.title}</h3>
+                <p className="text-text-muted text-base leading-loose font-light humanist italic opacity-90 transition-opacity duration-mid group-hover:opacity-100">{item.desc}</p>
               </article>
             ))}
           </div>
@@ -121,8 +126,8 @@ export const Home: React.FC = () => {
               <img 
                 src="https://images.unsplash.com/photo-1601612628452-9e99ced43524?q=80&w=1200&auto=format&fit=crop" 
                 alt="Our Master Pourer" 
-                // Micro-scale only
                 className="w-full h-full object-cover grayscale brightness-75 transition-all duration-[2s] ease-motion group-hover:scale-101 group-hover:brightness-90" 
+                loading="lazy"
                 onLoad={(e) => (e.target as HTMLImageElement).classList.add('loaded')}
               />
             </div>

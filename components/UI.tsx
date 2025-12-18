@@ -51,14 +51,16 @@ export const SectionHeading: React.FC<{ title: string; subtitle?: string; center
 );
 
 export const ProductCard: React.FC<{ product: any; onAddToCart?: () => void }> = ({ product, onAddToCart }) => (
-  <article className="group cursor-pointer scroll-reveal" aria-labelledby={`product-name-${product.id}`}>
+  <article className="group cursor-pointer scroll-reveal relative" aria-labelledby={`product-name-${product.id}`}>
+    {/* Touch Optimization: The whole card is clickable via the parent Link, so we ensure visual feedback is immediate on touch */}
     {/* Micro-scale interaction (1.01) instead of 1.10 */}
-    <div className="relative aspect-[4/5] overflow-hidden mb-6 md:mb-8 bg-border/10 artisan-card luxury-shadow transition-all duration-mid ease-motion group-hover:-translate-y-1 group-hover:shadow-xl border border-border/50 group-hover:border-accent/30">
+    <div className="relative aspect-[4/5] overflow-hidden mb-6 md:mb-8 bg-border/10 artisan-card luxury-shadow transition-all duration-mid ease-motion group-hover:-translate-y-1 group-hover:shadow-xl border border-border/50 group-hover:border-accent/30 group-active:scale-[0.99]">
       <img 
         src={product.image} 
         alt="" 
         // No zoom, just brightness/contrast shift
         className="w-full h-full object-cover grayscale-[0.2] contrast-[1.05] brightness-[0.95] transition-all duration-lux ease-motion group-hover:scale-101 group-hover:brightness-100 group-hover:grayscale-0"
+        loading="lazy"
         onLoad={(e) => (e.target as HTMLImageElement).classList.add('loaded')}
       />
       
@@ -72,16 +74,21 @@ export const ProductCard: React.FC<{ product: any; onAddToCart?: () => void }> =
       )}
       
       {/* Button Reveal - Soft Fade/Slide */}
-      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-mid ease-motion flex items-end justify-center pb-12">
+      {/* On mobile (hover:none), we don't rely on hover for the button. The user clicks the card to go to detail. 
+          The button is decorative/CTA for desktop users. */}
+      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-mid ease-motion flex items-end justify-center pb-12 pointer-events-none md:pointer-events-auto">
         <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-mid ease-motion delay-75">
-          <Button 
-            variant="primary" 
-            className="px-8 text-[10px] shadow-2xl" 
-            onClick={(e) => { e.stopPropagation(); onAddToCart?.(); }}
-            ariaLabel={`Explore scent notes for ${product.name}`}
-          >
-            Explore Note
-          </Button>
+          <span className="hidden md:inline-block">
+             <Button 
+              variant="primary" 
+              className="px-8 text-[10px] shadow-2xl" 
+              // Stop propagation so clicking the button doesn't trigger the Link twice (though nested interactive controls are invalid HTML, this handles the visual logic)
+              onClick={(e) => { e.preventDefault(); onAddToCart?.(); }}
+              ariaLabel={`Explore scent notes for ${product.name}`}
+            >
+              Explore Note
+            </Button>
+          </span>
         </div>
       </div>
     </div>

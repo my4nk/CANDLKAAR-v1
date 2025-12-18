@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Menu, X, Gift, User, Moon, Sun, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Menu, X, Gift, User, Moon, Sun, ArrowRight, Instagram, Mail } from 'lucide-react';
 import { NAVIGATION, FOOTER_LINKS } from '../constants';
 import { Button } from './UI';
 
@@ -36,10 +36,10 @@ export const Layout: React.FC<LayoutProps> = ({
         Skip to content
       </a>
 
-      {/* Floating Mode Toggle - Physical Button Feel */}
+      {/* Floating Mode Toggle - Positioned Higher for Mobile Safety */}
       <button
         onClick={toggleDarkMode}
-        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[60] p-3 md:p-4 rounded-full bg-surface border border-border shadow-xl text-primary hover:text-accent transition-all duration-mid ease-motion hover:scale-105 active:scale-95 group luxury-shadow focus:outline-none focus:ring-2 focus:ring-accent"
+        className="fixed bottom-8 right-4 md:bottom-8 md:right-8 z-[60] p-3 md:p-4 rounded-full bg-surface border border-border shadow-xl text-primary hover:text-accent transition-all duration-mid ease-motion hover:scale-105 active:scale-95 group luxury-shadow focus:outline-none focus:ring-2 focus:ring-accent"
         aria-label={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
         title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
       >
@@ -79,8 +79,6 @@ export const Layout: React.FC<LayoutProps> = ({
             </nav>
 
             {/* Logo - Adaptive Positioning */}
-            {/* Mobile: Static Flex Item (Left aligned). Desktop: Absolute Center. */}
-            {/* This prevents the logo from overlapping icons on small screens while keeping the luxury centered look on desktop. */}
             <Link 
               to="/" 
               className="flex flex-col items-start md:absolute md:left-1/2 md:-translate-x-1/2 md:items-center z-10 mr-auto md:mr-0 transition-opacity duration-mid ease-motion active:scale-99 hover:opacity-80 flex-shrink-0" 
@@ -91,7 +89,6 @@ export const Layout: React.FC<LayoutProps> = ({
             </Link>
 
             {/* Icons (Right Side) */}
-            {/* Tighter spacing on mobile (space-x-1) to fit all icons without wrapping */}
             <div className="flex items-center justify-end space-x-1 sm:space-x-2 md:space-x-8 lg:space-x-10 z-20 flex-shrink-0">
               <button 
                 onClick={toggleChristmas} 
@@ -128,15 +125,23 @@ export const Layout: React.FC<LayoutProps> = ({
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Enriched */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-surface md:hidden pt-32 px-10 animate-fade-in" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
-          <nav className="flex flex-col space-y-10 text-center">
+        <div className="fixed inset-0 z-40 bg-surface md:hidden pt-28 px-8 animate-fade-in flex flex-col h-full" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+          <nav className="flex flex-col space-y-6 text-center border-b border-border pb-8 mb-8">
             {NAVIGATION.map((item) => (
-              <Link key={item.path} to={item.path} className="text-3xl font-humanist italic text-primary hover:text-accent transition-colors duration-mid">{item.label}</Link>
+              <Link key={item.path} to={item.path} className="text-4xl font-humanist italic text-primary hover:text-accent transition-colors duration-mid">{item.label}</Link>
             ))}
-            <Link to="/account" className="text-3xl font-humanist italic text-primary hover:text-accent transition-colors duration-mid">The Studio</Link>
+            <Link to="/account" className="text-4xl font-humanist italic text-primary hover:text-accent transition-colors duration-mid">The Studio</Link>
           </nav>
+          
+          <div className="flex justify-center text-center">
+             <div className="flex flex-col space-y-4">
+               <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-accent mb-2">Connect</span>
+               <a href="#" className="flex items-center justify-center space-x-2 text-sm text-text-muted"><Instagram size={14}/> <span>Instagram</span></a>
+               <a href="#" className="flex items-center justify-center space-x-2 text-sm text-text-muted"><Mail size={14}/> <span>Email</span></a>
+             </div>
+          </div>
         </div>
       )}
 

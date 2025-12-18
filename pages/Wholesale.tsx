@@ -77,38 +77,45 @@ export const Wholesale: React.FC = () => {
         {/* Wholesale Table UI Shell */}
         <div className="border-t border-border pt-16 md:pt-20">
           <SectionHeading title="Tiered Pricing Guide" subtitle="For Informational Use" center />
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm min-w-[600px]">
-              <thead>
-                <tr className="border-b-2 border-primary uppercase tracking-widest text-[10px] font-bold text-primary">
-                  <th className="pb-4 px-4">Units Ordered</th>
-                  <th className="pb-4 px-4">Discount</th>
-                  <th className="pb-4 px-4">Production Time</th>
-                  <th className="pb-4 px-4">Invoicing</th>
-                </tr>
-              </thead>
-              <tbody className="text-text-muted">
-                <tr className="border-b border-border hover:bg-accent/5 transition-colors">
-                  <td className="py-6 px-4">50 - 100</td>
-                  <td className="py-6 px-4">15% Off MSRP</td>
-                  <td className="py-6 px-4">10 Business Days</td>
-                  <td className="py-6 px-4 italic">Prepaid Only</td>
-                </tr>
-                <tr className="border-b border-border hover:bg-accent/5 transition-colors">
-                  <td className="py-6 px-4">101 - 300</td>
-                  <td className="py-6 px-4">25% Off MSRP</td>
-                  <td className="py-6 px-4">15 Business Days</td>
-                  <td className="py-6 px-4 italic">Net 30 Available</td>
-                </tr>
-                <tr className="border-b border-border hover:bg-accent/5 transition-colors">
-                  <td className="py-6 px-4">301+</td>
-                  <td className="py-6 px-4">Custom Quote</td>
-                  <td className="py-6 px-4">Negotiated</td>
-                  <td className="py-6 px-4 italic">Net 30 Available</td>
-                </tr>
-              </tbody>
-            </table>
+          
+          {/* Scrollable Container with Fade Mask */}
+          <div className="relative group">
+            <div className="overflow-x-auto scroll-hint-mask pb-4">
+              <table className="w-full text-left text-sm min-w-[600px]">
+                <thead>
+                  <tr className="border-b-2 border-primary uppercase tracking-widest text-[10px] font-bold text-primary">
+                    <th className="pb-4 px-4">Units Ordered</th>
+                    <th className="pb-4 px-4">Discount</th>
+                    <th className="pb-4 px-4">Production Time</th>
+                    <th className="pb-4 px-4">Invoicing</th>
+                  </tr>
+                </thead>
+                <tbody className="text-text-muted">
+                  <tr className="border-b border-border hover:bg-accent/5 transition-colors">
+                    <td className="py-6 px-4">50 - 100</td>
+                    <td className="py-6 px-4">15% Off MSRP</td>
+                    <td className="py-6 px-4">10 Business Days</td>
+                    <td className="py-6 px-4 italic">Prepaid Only</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-accent/5 transition-colors">
+                    <td className="py-6 px-4">101 - 300</td>
+                    <td className="py-6 px-4">25% Off MSRP</td>
+                    <td className="py-6 px-4">15 Business Days</td>
+                    <td className="py-6 px-4 italic">Net 30 Available</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-accent/5 transition-colors">
+                    <td className="py-6 px-4">301+</td>
+                    <td className="py-6 px-4">Custom Quote</td>
+                    <td className="py-6 px-4">Negotiated</td>
+                    <td className="py-6 px-4 italic">Net 30 Available</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {/* Visual indicator for horizontal scroll on mobile */}
+            <div className="absolute right-0 top-0 bottom-12 w-8 bg-gradient-to-l from-surface to-transparent pointer-events-none md:hidden"></div>
           </div>
+
         </div>
       </div>
     </div>

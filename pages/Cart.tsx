@@ -15,7 +15,7 @@ export const Cart: React.FC = () => {
         <SectionHeading title="Your Bag" subtitle="Ready for Check Out" />
 
         {cartItems.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-16 relative">
             {/* List */}
             <div className="lg:col-span-2 space-y-6 md:space-y-8">
               {cartItems.map((item) => (
@@ -49,32 +49,34 @@ export const Cart: React.FC = () => {
               </Link>
             </div>
 
-            {/* Summary */}
-            <div className="bg-surface p-6 md:p-8 border border-border h-fit artisan-card shadow-sm">
-              <h4 className="text-xs uppercase tracking-widest font-bold mb-6 md:mb-8 border-b border-border pb-4 text-primary">Order Summary</h4>
-              <div className="space-y-4 mb-6 md:mb-8">
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-muted">Subtotal</span>
-                  <span className="text-primary">${subtotal}.00</span>
+            {/* Summary - Sticky Positioned */}
+            <div className="lg:col-span-1">
+              <div className="bg-surface p-6 md:p-8 border border-border artisan-card shadow-sm sticky top-24">
+                <h4 className="text-xs uppercase tracking-widest font-bold mb-6 md:mb-8 border-b border-border pb-4 text-primary">Order Summary</h4>
+                <div className="space-y-4 mb-6 md:mb-8">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-text-muted">Subtotal</span>
+                    <span className="text-primary">${subtotal}.00</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-text-muted">Shipping</span>
+                    <span className="text-accent uppercase font-bold text-[10px] tracking-widest">Calculated at checkout</span>
+                  </div>
+                  <div className="pt-4 border-t border-border flex justify-between font-bold text-lg text-primary">
+                    <span>Total</span>
+                    <span>${subtotal}.00</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-muted">Shipping</span>
-                  <span className="text-accent uppercase font-bold text-[10px] tracking-widest">Calculated at checkout</span>
-                </div>
-                <div className="pt-4 border-t border-border flex justify-between font-bold text-lg text-primary">
-                  <span>Total</span>
-                  <span>${subtotal}.00</span>
-                </div>
-              </div>
-              <Link to="/checkout">
-                <Button className="w-full py-4 md:py-5" variant="primary">Proceed to Checkout</Button>
-              </Link>
-              <div className="mt-8 text-center">
-                <p className="text-[10px] uppercase tracking-widest text-text-muted mb-4">Secure Checkout with</p>
-                <div className="flex justify-center space-x-4 grayscale opacity-40">
-                  <div className="h-6 w-10 bg-border/30 rounded"></div>
-                  <div className="h-6 w-10 bg-border/30 rounded"></div>
-                  <div className="h-6 w-10 bg-border/30 rounded"></div>
+                <Link to="/checkout">
+                  <Button className="w-full py-4 md:py-5" variant="primary">Proceed to Checkout</Button>
+                </Link>
+                <div className="mt-8 text-center">
+                  <p className="text-[10px] uppercase tracking-widest text-text-muted mb-4">Secure Checkout with</p>
+                  <div className="flex justify-center space-x-4 grayscale opacity-40">
+                    <div className="h-6 w-10 bg-border/30 rounded"></div>
+                    <div className="h-6 w-10 bg-border/30 rounded"></div>
+                    <div className="h-6 w-10 bg-border/30 rounded"></div>
+                  </div>
                 </div>
               </div>
             </div>
